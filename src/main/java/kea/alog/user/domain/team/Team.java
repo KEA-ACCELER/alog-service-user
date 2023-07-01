@@ -1,5 +1,4 @@
 package kea.alog.user.domain.team;
-import java.beans.JavaBean;
 import java.io.Serializable;
 
 import org.springframework.stereotype.Component;
@@ -11,7 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
 
 
 @Entity
