@@ -39,12 +39,16 @@ public class User extends BaseTimeEntity implements Serializable{
     @Column(name = "user_deleted")
     private boolean userDeleted;
 
+    @Column(name = "user_profile", length = 100)
+    private String userProfile;
+
     @Builder
-    public User(String userId, String userPw, String userNn, String userEmail, boolean userDeleted){
+    public User(String userId, String userPw, String userNn, String userEmail, boolean userDeleted, String userProfile){
         this.userId = userId;
         this.userPw = userPw;
         this.userNn = userNn;
         this.userEmail = userEmail;
         this.userDeleted = userDeleted;
+        this.userProfile = userProfile;
     }
 }
