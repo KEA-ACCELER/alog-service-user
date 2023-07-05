@@ -38,6 +38,9 @@ dependencies {
 	//jwt
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	
+	//security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	
 
 	//Test

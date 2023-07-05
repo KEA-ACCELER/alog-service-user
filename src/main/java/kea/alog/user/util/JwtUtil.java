@@ -30,6 +30,6 @@ public class JwtUtil {
     }
 
     public static String getUserPk(String token, String secretKey) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("userPk").toString();
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 }

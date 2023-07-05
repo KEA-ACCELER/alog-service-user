@@ -21,14 +21,14 @@ import kea.alog.user.web.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
     
     @Autowired
     UserService userService;
 
     @Operation(summary = "회원가입", description = "회원가입")
-    @ApiResponse(responseCode = "201", description = "return 사용예시 : userNn님 환영합니다")
+    @ApiResponse(responseCode = "201", description = "return : userNn \n 사용예시 : userNn님 환영합니다")
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody UserDto.RegistRequestDto registRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.signUp(registRequestDto).getUserNn());
@@ -46,7 +46,8 @@ public class UserController {
      * 
      * @return ok
      */
-    @GetMapping(path = "/idCheck/{userId}")
+    @Operation(summary = "아이디 중복확인", description = "아이디 중복확인")
+    @GetMapping(path = "/check/{userId}")
     public ResponseEntity<Boolean> isDuplicatedId(@PathVariable(value = "userId") String userId) {
         return ResponseEntity.ok(userService.isDuplicatedId(userId));
     }

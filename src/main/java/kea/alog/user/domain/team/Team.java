@@ -1,4 +1,5 @@
 package kea.alog.user.domain.team;
+import java.beans.JavaBean;
 import java.io.Serializable;
 
 import org.springframework.stereotype.Component;
