@@ -38,23 +38,16 @@ public class UserDto {
         private String userId ;
         private String userPw;
         private String email;
-        private String name;
-        private String phone;
-        private String address;
-        private LocalDateTime birth;
-        private Boolean gender;
+        private String userNN;
+
 
         @Builder
-        public GetUserResponseDto(Long userPk,String userId, String userPw, String email, String name, String phone, String address, LocalDateTime birth, Boolean gender){
+        public GetUserResponseDto(Long userPk,String userId, String userPw, String email, String NN){
             this.userPk = userPk;
             this.userId = userId;
             this.userPw = userPw;
             this.email = email;
-            this.phone = phone;
-            this.address = address;
-            this.birth = birth;
-            this.gender = gender;
-            this.name = name;
+            this.userNN = NN;
         }
     }
     

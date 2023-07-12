@@ -3,6 +3,7 @@ package kea.alog.user.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,10 +35,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.signUp(registRequestDto).getUserNn());
     }
 
-    // @GetMapping("/login")
-    // public ResponseEntity<User> login(@RequestBody UserDto.LoginRequestDto loginRequestDto) {
-    //     return ResponseEntity.status(HttpStatus.OK).body(userService.userLogin(loginRequestDto));
-    // }
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody UserDto.LoginRequestDto loginRequestDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.userLogin(loginRequestDto));
+    }
 
     /*
      * 아이디 중복확인 API
@@ -47,7 +48,7 @@ public class UserController {
      * @return ok
      */
     @Operation(summary = "아이디 중복확인", description = "아이디 중복확인")
-    @GetMapping(path = "/check/{userId}")
+    @GetMapping(path = "/duplicated/{userId}")
     public ResponseEntity<Boolean> isDuplicatedId(@PathVariable(value = "userId") String userId) {
         return ResponseEntity.ok(userService.isDuplicatedId(userId));
     }
@@ -72,8 +73,8 @@ public class UserController {
      * 
      * @return ok, userDto.GetUserResponseDto
      */
-    // @GetMapping(path = "/info")
-    // public ResponseEntity<UserDto.GetUserResponseDto> getUserInfo(Authentication authentication) {
-    //     return ResponseEntity.ok(userService.getUser(authentication));
-    // }
+    @GetMapping(path = "/info")
+    public ResponseEntity<UserDto.GetUserResponseDto> getUserInfo(Authentication authentication) {
+        return ResponseEntity.ok(userService.getUser(authentication));
+    }
 }

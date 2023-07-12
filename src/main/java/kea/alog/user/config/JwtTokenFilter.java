@@ -8,11 +8,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import kea.alog.user.domain.user.UserRepository;
 import kea.alog.user.service.UserService;
+import kea.alog.user.service.UserUserDetailsService;
 import kea.alog.user.util.JwtUtil;
 
 import jakarta.servlet.FilterChain;
@@ -35,6 +37,9 @@ public class JwtTokenFilter extends OncePerRequestFilter{ // 모든 요청마다
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    UserUserDetailsService userUserDetailsService;
+
     
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException { 
@@ -55,21 +60,29 @@ public class JwtTokenFilter extends OncePerRequestFilter{ // 모든 요청마다
         //Token Expired 여부
         if (JwtUtil.isExpired(token, secretKey)) {
             log.error(" ERROR : Token Expired");
+
             filterChain.doFilter(request, response);
             return;
         }
         // Token에서 유저 정보 꺼내기
         String userName = JwtUtil.getUserId(token, secretKey); 
-        //Long userPk = Long.parseLong(JwtUtil.getUserPk(token, secretKey));
-        //User user = userRepository.findByUserPk(userPk);
-
         log.info("userName : "+userName);
+        
+        //인증 수행
+        if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null){
 
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userName, null, List.of(new SimpleGrantedAuthority("USER"))); //권한 부여
+        // UsernamePasswordAuthenticationToken 은 filter에서 만들어서 AuthenticationManager에 넘긴다
+            // 유저 정보 조회
+            UserDetails userDetails = userUserDetailsService.loadUserByUsername(userName);
+            // Authentication 구현체
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userName, null, userDetails.getAuthorities()); //권한 부여
+            
+            //authentication 에 추가적인 정보 저장
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            //authentication을 SecurityContext에 저장
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
 
-        //Detail을 넣기
-        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
 
     }

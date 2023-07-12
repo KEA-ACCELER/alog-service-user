@@ -42,15 +42,17 @@ public class User extends BaseTimeEntity implements Serializable{
     @Column(name = "user_profile", length = 100)
     private String userProfile;
 
-    
+    @Column(name = "user_role", length = 10)
+    private String userRole;
 
     @Builder
-    public User(String userId, String userPw, String userNn, String userEmail, boolean userDeleted, String userProfile){
+    public User(String userId, String userPw, String userNn, String userEmail, boolean userDeleted, String userProfile, String role){
         this.userId = userId;
         this.userPw = userPw;
         this.userNn = userNn;
         this.userEmail = userEmail;
         this.userDeleted = userDeleted;
         this.userProfile = userProfile;
+        this.userRole = role;
     }
 }

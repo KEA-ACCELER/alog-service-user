@@ -28,4 +28,22 @@ public class Swagger3Config {
                 .components(new Components())
                 .info(info);
     }
+// JWT SecurityContext 구성
+    // private SecurityContext securityContext() {
+    //     return SecurityContext.builder()
+    //             .securityReferences(defaultAuth())
+    //             .build();
+    // }
+
+    // private List<SecurityReference> defaultAuth() {
+    //     AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+    //     AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+    //     authorizationScopes[0] = authorizationScope;
+    //     return List.of(new SecurityReference("Authorization", authorizationScopes));
+    // }
+    
+    // // ApiKey 정의
+    // private ApiKey apiKey() {
+    //     return new ApiKey("Authorization", "Authorization", "header");
+    // }
 }
