@@ -3,7 +3,7 @@ package kea.alog.user.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,9 +34,15 @@ public class UserController {
     public ResponseEntity<String> signup(@RequestBody UserDto.RegistRequestDto registRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.signUp(registRequestDto).getUserNn());
     }
-
+    /*
+     * 로그인 API
+     * 
+     * @RequestBody UserDto.LoginRequestDto
+     * 
+     * @return ok
+     */
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserDto.LoginRequestDto loginRequestDto) {
+    public ResponseEntity<UserDto.LoginResponseDto> login(@RequestBody UserDto.LoginRequestDto loginRequestDto) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.userLogin(loginRequestDto));
     }
 
@@ -73,8 +79,8 @@ public class UserController {
      * 
      * @return ok, userDto.GetUserResponseDto
      */
-    @GetMapping(path = "/info")
-    public ResponseEntity<UserDto.GetUserResponseDto> getUserInfo(Authentication authentication) {
-        return ResponseEntity.ok(userService.getUser(authentication));
-    }
+    // @GetMapping(path = "/info")
+    // public ResponseEntity<UserDto.GetUserResponseDto> getUserInfo(Authentication authentication) {
+    //     return ResponseEntity.ok(userService.getUser(authentication));
+    // }
 }

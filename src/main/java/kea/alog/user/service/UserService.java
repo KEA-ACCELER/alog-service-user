@@ -2,16 +2,16 @@ package kea.alog.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import kea.alog.user.domain.user.User;
 import kea.alog.user.domain.user.UserRepository;
-import kea.alog.user.util.JwtUtil;
+
 import kea.alog.user.web.dto.UserDto;
-import kea.alog.user.web.dto.UserDto.LoginRequestDto;
+
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,10 +27,7 @@ public class UserService {
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
 
-    @Value("${jwt.secret}")
-    private String secretKey;
 
-    private Long expireMS = 1000L * 60 * 60 * 24 * 7;// 1주일
 
     // 회원등록
     @Transactional
@@ -42,35 +39,36 @@ public class UserService {
     
    // 로그인
     @Transactional
-    public String userLogin(UserDto.LoginRequestDto loginRequestDto) {
-        User user = userRepository.findByUserId(loginRequestDto.getUserId());
+    public UserDto.LoginResponseDto userLogin(UserDto.LoginRequestDto loginRequestDto) {
+        User user = userRepository.findByUserId(loginRequestDto.getUserEmail());
         if (user == null) {
-            return "아이디가 존재하지 않습니다.";
+            return null;
         }
         if (!passwordEncoder.matches(loginRequestDto.getUserPw(), user.getUserPw())) {// 평문, 암호화 순. 순서 유의
-            return "비밀번호가 일치하지 않습니다.";
+            return null;
         }
         
-        String token = JwtUtil.createJwt(user.getUserPk(), user.getUserId(), secretKey, expireMS);
-        // System.out.println("token  " + token);
-        return token;
+        return UserDto.LoginResponseDto.builder()
+                .userPk(user.getUserPk())
+                .userNN(user.getUserNn())
+                .build();
     }
 
     // 회원정보조회
-    @Transactional
-    public UserDto.GetUserResponseDto getUser(Authentication authentication) {
+    // @Transactional
+    // public UserDto.GetUserResponseDto getUser(Authentication authentication) {
 
-        User user = userRepository.findByUserId(authentication.getName());
-        log.info(authentication.getDetails().toString());
-        return UserDto.GetUserResponseDto.builder()
-                .userPk(user.getUserPk())
-                .userId(user.getUserId())
-                .userPw(user.getUserPw())
-                .email(user.getUserEmail())
-                .NN(user.getUserNn())
-                .build();
+    //     User user = userRepository.findByUserId(authentication.getName());
+    //     log.info(authentication.getDetails().toString());
+    //     return UserDto.GetUserResponseDto.builder()
+    //             .userPk(user.getUserPk())
+    //             .userId(user.getUserId())
+    //             .userPw(user.getUserPw())
+    //             .email(user.getUserEmail())
+    //             .NN(user.getUserNn())
+    //             .build();
 
-    }
+    // }
 
     // 회원 삭제
     // @Transactional

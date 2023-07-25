@@ -67,7 +67,20 @@ public class UserDto {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class LoginRequestDto{
-        private String userId;
+        private String userEmail;
         private String userPw;
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class LoginResponseDto{
+        private Long userPk;
+        private String userNN;
+
+        @Builder
+        public LoginResponseDto(Long userPk, String userNN){
+            this.userPk = userPk;
+            this.userNN = userNN;
+        }
     }
 }
