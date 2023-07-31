@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 
-
 @Entity
 @Table(name = "team")
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)

@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Component
 @Entity
@@ -24,8 +25,8 @@ public class User extends BaseTimeEntity implements Serializable{
     @Column(name = "user_pk")
     private Long userPk;
 
-    @Column(name = "user_id", length = 30, nullable = false, unique = true)
-    private String userId;
+    // @Column(name = "user_id", length = 30, nullable = false, unique = true)
+    // private String userId;
 
     @Column(name = "user_pw", length = 100, nullable = false)
     private String userPw;
@@ -36,15 +37,23 @@ public class User extends BaseTimeEntity implements Serializable{
     @Column(name = "user_email", length = 50, nullable = false)
     private String userEmail;
 
+    @Setter
     @Column(name = "user_deleted")
     private boolean userDeleted;
 
+    @Column(name = "user_profile", length = 100)
+    private String userProfile;
+
+    @Column(name = "user_role", length = 10)
+    private String userRole;
+
     @Builder
-    public User(String userId, String userPw, String userNn, String userEmail, boolean userDeleted){
-        this.userId = userId;
+    public User( String userPw, String userNn, String userEmail, boolean userDeleted, String userProfile, String role){
         this.userPw = userPw;
         this.userNn = userNn;
         this.userEmail = userEmail;
         this.userDeleted = userDeleted;
+        this.userProfile = userProfile;
+        this.userRole = role;
     }
 }
