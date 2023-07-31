@@ -3,7 +3,7 @@ package kea.alog.user.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,9 +54,9 @@ public class UserController {
      * @return ok
      */
     @Operation(summary = "아이디 중복확인", description = "아이디 중복확인")
-    @GetMapping(path = "/duplicated/{userId}")
-    public ResponseEntity<Boolean> isDuplicatedId(@PathVariable(value = "userId") String userId) {
-        return ResponseEntity.ok(userService.isDuplicatedId(userId));
+    @GetMapping(path = "/duplicated/{userNN}")
+    public ResponseEntity<Boolean> isDuplicatedId(@PathVariable(value = "userNN") String userNN) {
+        return ResponseEntity.ok(userService.isDuplicatedId(userNN));
     }
 
     /*
@@ -66,11 +66,11 @@ public class UserController {
      * 
      * @return ok, "deleted"
      */
-    // @DeleteMapping(path = "/delete")
-    // public ResponseEntity<String> deleteUser(Authentication authentication) {
-    //     userService.deleteUser(authentication);
-    //     return ResponseEntity.ok("deleted");
-    // }
+    @DeleteMapping(path = "/delete/{userPk}")
+    public ResponseEntity<String> deleteUser(@PathVariable(value = "userPk") Long userPk) {
+        userService.deleteUser(userPk);
+        return ResponseEntity.ok("deleted");
+    }
 
     /*
      * 회원조회 API
@@ -79,8 +79,8 @@ public class UserController {
      * 
      * @return ok, userDto.GetUserResponseDto
      */
-    // @GetMapping(path = "/info")
-    // public ResponseEntity<UserDto.GetUserResponseDto> getUserInfo(Authentication authentication) {
-    //     return ResponseEntity.ok(userService.getUser(authentication));
-    // }
+    @GetMapping(path = "/info/{userPk}")
+    public ResponseEntity<UserDto.GetUserResponseDto> getUserInfo(@PathVariable(value = "userPk") Long userPk) {
+        return ResponseEntity.ok(userService.getUser(userPk));
+    }
 }

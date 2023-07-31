@@ -40,7 +40,7 @@ public class UserService {
    // 로그인
     @Transactional
     public UserDto.LoginResponseDto userLogin(UserDto.LoginRequestDto loginRequestDto) {
-        User user = userRepository.findByUserId(loginRequestDto.getUserEmail());
+        User user = userRepository.findByUserEmail(loginRequestDto.getUserEmail());
         if (user == null) {
             return null;
         }
@@ -55,30 +55,28 @@ public class UserService {
     }
 
     // 회원정보조회
-    // @Transactional
-    // public UserDto.GetUserResponseDto getUser(Authentication authentication) {
+    @Transactional
+    public UserDto.GetUserResponseDto getUser(Long userPk) {
 
-    //     User user = userRepository.findByUserId(authentication.getName());
-    //     log.info(authentication.getDetails().toString());
-    //     return UserDto.GetUserResponseDto.builder()
-    //             .userPk(user.getUserPk())
-    //             .userId(user.getUserId())
-    //             .userPw(user.getUserPw())
-    //             .email(user.getUserEmail())
-    //             .NN(user.getUserNn())
-    //             .build();
+        User user = userRepository.findByUserPk(userPk);
+        return UserDto.GetUserResponseDto.builder()
+                .userPk(user.getUserPk())
+                .email(user.getUserEmail())
+                .NN(user.getUserNn())
+                .build();
 
-    // }
+    }
 
     // 회원 삭제
-    // @Transactional
-    // public void deleteUser(Authentication authentication) {
-    //     userRepository.deleteByUserId(authentication.getName());
-    // }
+    @Transactional
+    public void deleteUser(Long userPk) {
+        User user = userRepository.findByUserPk(userPk);
+        user.setUserDeleted(true);
+    }
 
     // 아이디 중복 확인
     @Transactional
-    public boolean isDuplicatedId(String userId) {
-        return userRepository.existsByUserId(userId);
+    public boolean isDuplicatedId(String userNN) {
+        return userRepository.existsByUserNn(userNN);
     }
 }

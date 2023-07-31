@@ -14,7 +14,6 @@ public class UserDto {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class RegistRequestDto {
-        private String userId;
         @Setter
         private String userPw;
         private String userNN;
@@ -22,7 +21,6 @@ public class UserDto {
         
         public User toEntity() {
             return User.builder()
-                    .userId(userId)
                     .userPw(userPw)
                     .userNn(userNN)
                     .userEmail(email)
@@ -35,34 +33,32 @@ public class UserDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class GetUserResponseDto {
         private Long userPk;
-        private String userId ;
-        private String userPw;
+        // private String userPw;
         private String email;
         private String userNN;
 
 
         @Builder
-        public GetUserResponseDto(Long userPk,String userId, String userPw, String email, String NN){
+        public GetUserResponseDto(Long userPk,  String email, String NN){
             this.userPk = userPk;
-            this.userId = userId;
-            this.userPw = userPw;
+            // this.userPw = userPw;
             this.email = email;
             this.userNN = NN;
         }
     }
     
-    @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class UpdateProfileRequestDto {
-        private String userId;
-        private String userProfile;
+    // @Getter
+    // @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    // public static class UpdateProfileRequestDto {
+    //     private String userId;
+    //     private String userProfile;
 
-        @Builder
-        public UpdateProfileRequestDto(String userId, String profile){
-            this.userId = userId;
-            this.userProfile = profile;
-        }
-    }
+    //     @Builder
+    //     public UpdateProfileRequestDto(String userId, String profile){
+    //         this.userId = userId;
+    //         this.userProfile = profile;
+    //     }
+    // }
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
