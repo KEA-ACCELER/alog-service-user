@@ -38,6 +38,7 @@ public class User extends BaseTimeEntity implements Serializable{
     private String userEmail;
 
     @Setter
+    @Getter
     @Column(name = "user_deleted")
     private boolean userDeleted;
 
