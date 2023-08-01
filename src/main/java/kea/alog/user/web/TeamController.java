@@ -38,7 +38,7 @@ public class TeamController {
 
     @Operation(summary = "팀 정보", description = "팀 이름으로 팀 정보 조회")
     @GetMapping()
-    public ResponseEntity<Team> getTeamInfo(@RequestParam String teamName) {
-        return ResponseEntity.status(HttpStatus.OK).body(teamService.getTeamInfo(teamName));
+    public ResponseEntity<Team> getTeamInfo(@RequestParam String teamName, @RequestParam Long userPk) {
+        return ResponseEntity.status(HttpStatus.OK).body(teamService.getTeamInfo(teamName, userPk));
     }
 }

@@ -1,16 +1,22 @@
 package kea.alog.user.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import kea.alog.user.domain.team.Team;
 import kea.alog.user.domain.team.TeamRepository;
+import kea.alog.user.domain.teamMember.TeamMember;
+import kea.alog.user.domain.teamMember.TeamMemberRepository;
 import kea.alog.user.web.dto.TeamDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TeamService {
     
     @Autowired
@@ -18,6 +24,9 @@ public class TeamService {
 
     @Autowired
     TeamMemberService teamMemberService;
+
+    @Autowired
+    TeamMemberRepository teamMemberRepository;
 
     @Transactional
     public String createTeam(TeamDto.CreateTeamRequestDto createTeamRequestDto, Long userPk) {
@@ -62,8 +71,24 @@ public class TeamService {
     }
 
     @Transactional
-    public Team getTeamInfo(String teamName) {
-        return teamRepository.findByTeamName(teamName);
+    public Team getTeamInfo(String teamName, Long userPk) {
+        Team team = teamRepository.findByTeamName(teamName);
+        
+        if (team == null) {
+            log.info("존재하지 않는 팀을 조회하려 하였습니다.");
+            return null;
+        }
+        if (team.getTeamLeaderPk() == userPk) {
+            return team;
+        }
+        List<TeamMember> teamMemberList = teamMemberRepository.findAllByTeam(team);
+        for (TeamMember teamMember : teamMemberList) {
+            if (teamMember.getUser().getUserPk() == userPk) {
+                return team;
+            }
+        }
+        log.info("팀에 속하지 않은 사용자가 팀 정보를 조회하려 하였습니다.");
+        return null;
     }
         
     
