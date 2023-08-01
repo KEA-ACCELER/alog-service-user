@@ -27,20 +27,16 @@ public class Team extends BaseTimeEntity implements Serializable{
     @Column(name = "team_pk")
     private Long teamPk;
 
-    @Column(name = "team_name", length = 10, nullable = false, unique = true)
+    @Column(name = "team_name", length = 20)
     private String teamName;
 
-    @Column(name =  "team_leader_nn", length = 10)
-    private String teamLeaderNn;
 
     @Column(name = "team_leader_pk")
     private Long teamLeaderPk;
 
-
     @Builder
-    public Team (String teamName, String teamLeaderNn, Long teamLeaderPk){
+    public Team (String teamName, Long teamLeaderPk){
         this.teamName = teamName;
-        this.teamLeaderNn = teamLeaderNn;
         this.teamLeaderPk = teamLeaderPk;
     }
 }

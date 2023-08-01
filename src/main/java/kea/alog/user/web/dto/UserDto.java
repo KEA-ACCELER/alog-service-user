@@ -32,6 +32,7 @@ public class UserDto {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class GetUserResponseDto {
+        
         private Long userPk;
         // private String userPw;
         private String email;
