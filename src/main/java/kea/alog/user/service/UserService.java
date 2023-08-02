@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import jakarta.mail.MessagingException;
+
 import jakarta.transaction.Transactional;
 import kea.alog.user.domain.email.Email;
 import kea.alog.user.domain.email.EmailRepository;
@@ -35,14 +35,24 @@ public class UserService {
     EmailRepository emailRepository;
 
     // 회원등록
-    //TODO 깃허브로 접근 할 경우 이메일 인증 하지 않음.
+    // TODO 깃허브로 접근 할 경우 이메일 인증 하지 않음.
     @Transactional
     public User signUp(UserDto.RegistRequestDto registRequestDto) {
+        if (userRepository.findByUserEmail(registRequestDto.getEmail()) != null) {
+            log.info("이미 가입된 이메일입니다");
+            return null;
+        }
+
         Email email = emailRepository.findByEmail(registRequestDto.getEmail());
-        if (!email.getVerifyCode().equals("VERIFIED")) {
+        if(email==null){
             log.info("이메일 인증을 해주세요");
             return null;
         }
+        if (!email.getVerifyCode().equals("VERIFIED")) {
+            log.info("이메일 인증을 다시 시도해주세요");
+            return null;
+        }
+    
         //회원 가입을 완료한 유저이기 때문에 email테이블의 정보 삭제
         emailRepository.delete(email);
 

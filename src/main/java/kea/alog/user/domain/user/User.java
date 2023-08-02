@@ -51,16 +51,16 @@ public class User extends BaseTimeEntity implements Serializable{
 
     @Setter
     @Column(name = "is_email_verified", length = 10)
-    private boolean isEmailVerified;
+    private boolean isVerified;
 
 
     @Builder
-    public User( String userPw, String userNn, String userEmail, boolean userDeleted, String userProfile, boolean isEmailVerified){
+    public User( String userPw, String userNn, String userEmail, boolean userDeleted, String userProfile, boolean isVerified){
         this.userPw = userPw;
         this.userNn = userNn;
         this.userEmail = userEmail;
         this.userDeleted = userDeleted;
         this.userProfile = userProfile;
-        this.isEmailVerified = isEmailVerified;
+        this.isVerified = isVerified;
     }
 }

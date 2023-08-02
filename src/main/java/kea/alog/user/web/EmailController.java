@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.mail.MessagingException;
 import kea.alog.user.service.EmailService;
 import kea.alog.user.web.dto.EmailDto;
 
@@ -28,9 +27,9 @@ public class EmailController {
      * 
      * @return ok, "success"
      */
-    @Operation(summary = "이메일 인증", description = "이메일 인증")
-    @PostMapping(path = "/send")
-    public ResponseEntity<String> sendEmail(@RequestParam String EmailTo) throws MessagingException {
+    @Operation(summary = "인증 메일 전송", description = "인증 메일 전송")
+    @PostMapping(path = "/send", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<String> sendEmail(@RequestParam String EmailTo) {
         return ResponseEntity.ok(emailService.sendEmail(EmailTo));
     }
 
@@ -38,12 +37,12 @@ public class EmailController {
      * 이메일 인증코드 확인
      * 
      * @variable EmailTo, code
-     * 
+     *송
      * @return ok, "success"
      */
 
     @Operation(summary = "이메일 인증 확인", description = "이메일 인증 확인")
-    @PostMapping(path = "/verify")
+    @PostMapping(path = "/verify", produces = "application/json;charset=UTF-8")
     public ResponseEntity<String> verifyEmail(@RequestBody EmailDto.VerifyEmailRequestDto verifyEmailRequestDto) {
         return ResponseEntity.ok(emailService.verifyEmail(verifyEmailRequestDto));
     }

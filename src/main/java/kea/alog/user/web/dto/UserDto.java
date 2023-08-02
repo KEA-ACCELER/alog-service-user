@@ -25,7 +25,7 @@ public class UserDto {
                     .userNn(userNN)
                     .userEmail(email)
                     .userDeleted(false) //default value
-                
+                    .isVerified(true)
                     .build();
         }
     }
