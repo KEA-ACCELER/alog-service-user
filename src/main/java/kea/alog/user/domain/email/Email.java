@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Component
@@ -30,6 +31,7 @@ public class Email {
     @Column(name = "email", length = 30, nullable = false)
     private String email;
 
+    @Setter
     @Column(name = "verify_code", length = 10)
     private String verifyCode;
 

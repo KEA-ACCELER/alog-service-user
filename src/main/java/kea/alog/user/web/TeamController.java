@@ -17,7 +17,7 @@ import kea.alog.user.service.TeamService;
 import kea.alog.user.web.dto.TeamDto;
 
 
-@RequestMapping("/api/teams")
+@RequestMapping("/api/users/teams")
 @RestController
 public class TeamController {
     

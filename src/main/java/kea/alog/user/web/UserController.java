@@ -85,16 +85,5 @@ public class UserController {
         return ResponseEntity.ok(userService.getUser(userPk));
     }
 
-    /*
-     * 이메일 인증
-     * 
-     * @variable EmailTo
-     * 
-     * @return ok, "success"
-     */
-    @Operation(summary = "이메일 인증", description = "이메일 인증")
-    @PostMapping(path = "/email")
-    public ResponseEntity<String> sendEmail(@RequestParam String EmailTo) {
-        return ResponseEntity.ok(userService.verifyingEmail(EmailTo));
-    }
+
 }

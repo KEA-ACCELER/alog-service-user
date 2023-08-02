@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Email;
-import kea.alog.user.domain.email.EmailMessage;
+import kea.alog.user.domain.email.Email;
+import kea.alog.user.domain.email.EmailRepository;
 import kea.alog.user.domain.user.User;
 import kea.alog.user.domain.user.UserRepository;
 import kea.alog.user.utils.CreateRandomCode;
+import kea.alog.user.web.dto.EmailDto;
 import kea.alog.user.web.dto.UserDto;
 
 import lombok.NoArgsConstructor;
@@ -30,11 +32,21 @@ public class UserService {
     BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    EmailService emailService;
+    EmailRepository emailRepository;
 
     // 회원등록
+    //TODO 깃허브로 접근 할 경우 이메일 인증 하지 않음.
     @Transactional
     public User signUp(UserDto.RegistRequestDto registRequestDto) {
+        Email email = emailRepository.findByEmail(registRequestDto.getEmail());
+        if (!email.getVerifyCode().equals("VERIFIED")) {
+            log.info("이메일 인증을 해주세요");
+            return null;
+        }
+        //회원 가입을 완료한 유저이기 때문에 email테이블의 정보 삭제
+        emailRepository.delete(email);
+
+        //비밀번호 암호화
         registRequestDto.setUserPw(passwordEncoder.encode(registRequestDto.getUserPw()));
         return userRepository.save(registRequestDto.toEntity());
 
@@ -83,25 +95,5 @@ public class UserService {
         return userRepository.existsByUserNn(userNN);
     }
 
-    //이메일 인증코드 발송
-    @Transactional
-    public String verifyingEmail(String emailTo) {
-        String authCode = CreateRandomCode.createCode();
 
-        EmailMessage message = EmailMessage.builder()
-                                            .to(emailTo)
-                                            .subject("회원가입 인증 코드")
-                                            .message("인증 코드: " + authCode)
-                                            .build();
-
-        String result = emailService.sendMimeMessage(message);
-        
-        return null;
-    }
-
-    //이메일 인증코드 대조
-    @Transactional
-    public boolean isEmailVerified(String authCode) {
-        return false;
-    }
 }

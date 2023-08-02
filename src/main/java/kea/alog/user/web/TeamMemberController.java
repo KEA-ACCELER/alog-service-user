@@ -19,7 +19,7 @@ import kea.alog.user.web.dto.TeamMemberDto.DeleteTeamMembersRequestDto;
 import kea.alog.user.web.dto.TeamMemberDto.SaveTeamMembersRequestDto;
 import kea.alog.user.web.dto.TeamMemberDto.getTeamMembersResponseDto;
 
-@RequestMapping("/api/team-members")
+@RequestMapping("/api/users/team-members")
 @RestController
 public class TeamMemberController {
 
