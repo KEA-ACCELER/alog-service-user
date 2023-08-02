@@ -42,7 +42,7 @@ public class EmailController {
      */
 
     @Operation(summary = "이메일 인증 확인", description = "이메일 인증 확인")
-    @PostMapping(path = "/verify", produces = "application/json;charset=UTF-8")
+    @PostMapping(path = "/verify")
     public ResponseEntity<String> verifyEmail(@RequestBody EmailDto.VerifyEmailRequestDto verifyEmailRequestDto) {
         return ResponseEntity.ok(emailService.verifyEmail(verifyEmailRequestDto));
     }
