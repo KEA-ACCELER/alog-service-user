@@ -42,17 +42,17 @@ public class TeamMemberService {
             User user = userRepository.findByUserNn(userNN);
             System.out.println("user: " + user);
             if (user == null || user.isUserDeleted()) {
-                log.info("존재하지 않는 유저를 팀 멤버로 등록하려 하였습니다.");
+                log.info("There is no user to add");
                 return false;
             }
 
             if (savedTeam.getTeamLeaderPk() == user.getUserPk()) {
-                log.info("팀장을 팀 멤버로 등록하려 하였습니다.");
+                log.info("Team leader cannot be team member");
                 return false;
             }
 
             if (teamMemberRepository.existsByTeamAndUser(savedTeam, user)) {
-                log.info("이미 팀 멤버로 등록된 유저를 팀 멤버로 등록하려 하였습니다.");
+                log.info("The user is already team member");
                 return false;
             }
 
@@ -72,45 +72,45 @@ public class TeamMemberService {
 
         Team team = teamRepository.findByTeamName(saveTeamMembersRequestDto.getTeamName());
         if (team == null) {
-            return "존재하지 않는 팀입니다.";
+            return "The team is not existed";
         }
         if (team.getTeamLeaderPk() != userPk) {
-            return "사용자가 팀장이 아닙니다.";
+            return "You are not the leader of the team";
         }
         Boolean isAllMemberSaved = saveTeamMember(team, saveTeamMembersRequestDto.getUserNNList());
         if (!isAllMemberSaved) {
-            return "팀 멤버가 추가되지 않았습니다.";
+            return "Team member is not added";
         }
-        return "한 명 이상의 팀 멤버가 추가되었습니다.";
+        return "More than one team member is added";
 
     }
 
     @Transactional
     public String deleteTeamMember(DeleteTeamMembersRequestDto deleteTeamMembersRequestDto, Long userPk) {
         if (deleteTeamMembersRequestDto.getUserNNList() == null) {
-            return "퇴출할 멤버가 존재하지 않습니다.";
+            return "There is no user to delete";
         }
         Team team = teamRepository.findByTeamName(deleteTeamMembersRequestDto.getTeamName());
         if (team == null) {
-            return "존재하지 않는 팀입니다";
+            return "The team is not existed";
         }
 
         if (userPk != team.getTeamLeaderPk()) {
-            return "사용자가 팀장이 아닙니다.";
+            return "You are not team leader.";
         }
         
 
         for (String userNN : deleteTeamMembersRequestDto.getUserNNList()) {
             User user = userRepository.findByUserNn(userNN);
             if (user == null || user.isUserDeleted()) {
-                return "존재하지 않는 유저를 퇴출하려 하였습니다.";
+                return "You can not delete the user who is not existed or deleted.";
             }
             if (user.getUserPk()== userPk){
-                return "팀장 퇴출은 불가능합니다.";
+                return "You can not delete yourself.";
             }
             teamMemberRepository.deleteByTeamAndUser(team, user);
         }
-        return "한 명 이상의 팀 멤버가 퇴출되었습니다.";
+        return "More than one team member is deleted";
     }
 
     @Transactional

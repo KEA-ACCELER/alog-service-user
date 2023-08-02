@@ -36,21 +36,21 @@ public class TeamService {
                                 .build();
 
         if (teamRepository.existsByTeamNameAndTeamLeaderPk(team.getTeamName(), team.getTeamLeaderPk())) {
-            return "이미 존재하는 팀입니다";
+            return "Team is already existed";
         }
         Team savedTeam = teamRepository.save(team);
 
         if (savedTeam == null) {
-            return "팀 생성에 실패하였습니다";
+            return "making team is failed";
         }
   
         Boolean isallMemberSaved = teamMemberService.saveTeamMember(savedTeam, createTeamRequestDto.getUserNNList());
 
         if (!isallMemberSaved) {
-            return "팀원 등록에 실패하였습니다";
+            return "team member save failed";
         }
 
-        return "팀이 생성되었습니다";
+        return "team created successfully";
 
     }
 
@@ -59,15 +59,15 @@ public class TeamService {
 
         Team team = teamRepository.findByTeamName(teamName);
         if (team == null) {
-            return "존재하지 않는 팀을 삭제하려 하였습니다.";
+            return "team is not existed";
         }
 
         if(team.getTeamLeaderPk() != userPk){
-            return "사용자가 팀장이 아닙니다.";
+            return "you are not team leader";
         }
 
         teamRepository.delete(team);
-        return "팀이 삭제되었습니다.";
+        return "team deleted successfully";
     }
 
     @Transactional
@@ -75,7 +75,7 @@ public class TeamService {
         Team team = teamRepository.findByTeamName(teamName);
         
         if (team == null) {
-            log.info("존재하지 않는 팀을 조회하려 하였습니다.");
+            log.info("team is not existed, so that team info is null");
             return null;
         }
         if (team.getTeamLeaderPk() == userPk) {
@@ -87,7 +87,7 @@ public class TeamService {
                 return team;
             }
         }
-        log.info("팀에 속하지 않은 사용자가 팀 정보를 조회하려 하였습니다.");
+        log.info("you are not authorized to access this team info");
         return null;
     }
         

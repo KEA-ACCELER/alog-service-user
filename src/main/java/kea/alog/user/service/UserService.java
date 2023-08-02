@@ -6,10 +6,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
 import jakarta.transaction.Transactional;
+import kea.alog.user.domain.email.Email;
+import kea.alog.user.domain.email.EmailRepository;
 import kea.alog.user.domain.user.User;
 import kea.alog.user.domain.user.UserRepository;
-
+import kea.alog.user.utils.CreateRandomCode;
+import kea.alog.user.web.dto.EmailDto;
 import kea.alog.user.web.dto.UserDto;
 
 import lombok.NoArgsConstructor;
@@ -27,11 +31,32 @@ public class UserService {
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
 
-
+    @Autowired
+    EmailRepository emailRepository;
 
     // 회원등록
+    // TODO 깃허브로 접근 할 경우 이메일 인증 하지 않음.
     @Transactional
     public User signUp(UserDto.RegistRequestDto registRequestDto) {
+        if (userRepository.findByUserEmail(registRequestDto.getEmail()) != null) {
+            log.info("already signed up");
+            return null;
+        }
+
+        Email email = emailRepository.findByEmail(registRequestDto.getEmail());
+        if(email==null){
+            log.info("try to verify with email");
+            return null;
+        }
+        if (!email.getVerifyCode().equals("VERIFIED")) {
+            log.info("not verified email");
+            return null;
+        }
+    
+        //회원 가입을 완료한 유저이기 때문에 email테이블의 정보 삭제
+        emailRepository.delete(email);
+
+        //비밀번호 암호화
         registRequestDto.setUserPw(passwordEncoder.encode(registRequestDto.getUserPw()));
         return userRepository.save(registRequestDto.toEntity());
 
@@ -79,4 +104,6 @@ public class UserService {
     public boolean isDuplicatedId(String userNN) {
         return userRepository.existsByUserNn(userNN);
     }
+
+
 }
