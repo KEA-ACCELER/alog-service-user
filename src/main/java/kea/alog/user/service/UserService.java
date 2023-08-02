@@ -39,17 +39,17 @@ public class UserService {
     @Transactional
     public User signUp(UserDto.RegistRequestDto registRequestDto) {
         if (userRepository.findByUserEmail(registRequestDto.getEmail()) != null) {
-            log.info("이미 가입된 이메일입니다");
+            log.info("already signed up");
             return null;
         }
 
         Email email = emailRepository.findByEmail(registRequestDto.getEmail());
         if(email==null){
-            log.info("이메일 인증을 해주세요");
+            log.info("try to verify with email");
             return null;
         }
         if (!email.getVerifyCode().equals("VERIFIED")) {
-            log.info("이메일 인증을 다시 시도해주세요");
+            log.info("not verified email");
             return null;
         }
     

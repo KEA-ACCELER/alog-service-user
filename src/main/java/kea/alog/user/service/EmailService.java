@@ -36,11 +36,11 @@ public class EmailService {
     public String sendEmail(String emailTo) {
 
         if (emailTo == null) {
-            return "이메일을 입력해주세요";
+            return "Please Enter Email Address";
         }
 
         if (userRepository.findByUserEmail(emailTo) != null) {
-            return "이미 가입된 이메일입니다";
+            return "You are already signed up";
         }
 
         // 인증 코드 발급
@@ -56,7 +56,7 @@ public class EmailService {
                     .build();
 
             sendMimeMessage(message);
-            return "이메일 인증코드가 재발송되었습니다";
+            return "Email Verify Code re-sended Successfully";
         } else {
             log.info("이메일 최초인증");
             email = emailRepository.save(Email.builder()
@@ -70,7 +70,7 @@ public class EmailService {
                     .build();
 
             sendMimeMessage(message);
-            return "이메일 인증코드가 발송되었습니다";
+            return "Email Verify Code sended Successfully";
         }
 
     }
@@ -80,14 +80,14 @@ public class EmailService {
 
         Email email = emailRepository.findByEmail(verifyEmailRequestDto.getEmail());
         if (email == null) {
-            return "존재하지 않는 이메일 입니다. 다시 시도해주세요";
+            return "Email is not existed. Please try again";
         }
         if (email.getVerifyCode().equals(verifyEmailRequestDto.getCode())) {
             email.setVerifyCode("VERIFIED");
-            return "이메일 인증이 완료되었습니다";
+            return "Email is Verified Successfully";
         }
 
-        return "이메일 인증이 실패하였습니다. 다시 시도해주세요";
+        return "Email is not Verified. Please try again";
     }
 
     public void sendMimeMessage(EmailMessage messageContent) {
@@ -102,7 +102,7 @@ public class EmailService {
 
             mailSender.send(message);
         } catch (MessagingException e) {
-            log.info("메일 전송 실패");
+            log.info("Sending Email is failed");
         }
 
     }

@@ -28,7 +28,7 @@ public class EmailController {
      * @return ok, "success"
      */
     @Operation(summary = "인증 메일 전송", description = "인증 메일 전송")
-    @PostMapping(path = "/send", produces = "application/json;charset=UTF-8")
+    @PostMapping(path = "/send")
     public ResponseEntity<String> sendEmail(@RequestParam String EmailTo) {
         return ResponseEntity.ok(emailService.sendEmail(EmailTo));
     }
