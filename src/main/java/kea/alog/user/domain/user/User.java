@@ -34,6 +34,7 @@ public class User extends BaseTimeEntity implements Serializable{
     @Column(name = "user_nn", length = 10, nullable = false)
     private String userNn;
 
+
     @Column(name = "user_email", length = 50, nullable = false)
     private String userEmail;
 
@@ -45,16 +46,21 @@ public class User extends BaseTimeEntity implements Serializable{
     @Column(name = "user_profile", length = 100)
     private String userProfile;
 
-    @Column(name = "user_role", length = 10)
-    private String userRole;
+    // @Column(name = "user_role", length = 10)
+    // private String userRole;
+
+    @Setter
+    @Column(name = "is_email_verified", length = 10)
+    private boolean isEmailVerified;
+
 
     @Builder
-    public User( String userPw, String userNn, String userEmail, boolean userDeleted, String userProfile, String role){
+    public User( String userPw, String userNn, String userEmail, boolean userDeleted, String userProfile, boolean isEmailVerified){
         this.userPw = userPw;
         this.userNn = userNn;
         this.userEmail = userEmail;
         this.userDeleted = userDeleted;
         this.userProfile = userProfile;
-        this.userRole = role;
+        this.isEmailVerified = isEmailVerified;
     }
 }

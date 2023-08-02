@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import feign.Response;
@@ -82,5 +83,18 @@ public class UserController {
     @GetMapping(path = "/info/{userPk}")
     public ResponseEntity<UserDto.GetUserResponseDto> getUserInfo(@PathVariable(value = "userPk") Long userPk) {
         return ResponseEntity.ok(userService.getUser(userPk));
+    }
+
+    /*
+     * 이메일 인증
+     * 
+     * @variable EmailTo
+     * 
+     * @return ok, "success"
+     */
+    @Operation(summary = "이메일 인증", description = "이메일 인증")
+    @PostMapping(path = "/email")
+    public ResponseEntity<String> sendEmail(@RequestParam String EmailTo) {
+        return ResponseEntity.ok(userService.verifyingEmail(EmailTo));
     }
 }

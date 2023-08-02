@@ -7,9 +7,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Email;
+import kea.alog.user.domain.email.EmailMessage;
 import kea.alog.user.domain.user.User;
 import kea.alog.user.domain.user.UserRepository;
-
+import kea.alog.user.utils.CreateRandomCode;
 import kea.alog.user.web.dto.UserDto;
 
 import lombok.NoArgsConstructor;
@@ -27,7 +29,8 @@ public class UserService {
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
 
-
+    @Autowired
+    EmailService emailService;
 
     // 회원등록
     @Transactional
@@ -78,5 +81,27 @@ public class UserService {
     @Transactional
     public boolean isDuplicatedId(String userNN) {
         return userRepository.existsByUserNn(userNN);
+    }
+
+    //이메일 인증코드 발송
+    @Transactional
+    public String verifyingEmail(String emailTo) {
+        String authCode = CreateRandomCode.createCode();
+
+        EmailMessage message = EmailMessage.builder()
+                                            .to(emailTo)
+                                            .subject("회원가입 인증 코드")
+                                            .message("인증 코드: " + authCode)
+                                            .build();
+
+        String result = emailService.sendMimeMessage(message);
+        
+        return null;
+    }
+
+    //이메일 인증코드 대조
+    @Transactional
+    public boolean isEmailVerified(String authCode) {
+        return false;
     }
 }

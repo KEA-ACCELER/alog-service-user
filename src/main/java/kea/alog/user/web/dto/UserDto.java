@@ -25,6 +25,7 @@ public class UserDto {
                     .userNn(userNN)
                     .userEmail(email)
                     .userDeleted(false) //default value
+                
                     .build();
         }
     }
