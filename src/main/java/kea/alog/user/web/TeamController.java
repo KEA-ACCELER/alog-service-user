@@ -1,5 +1,7 @@
 package kea.alog.user.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import kea.alog.user.domain.team.Team;
+import kea.alog.user.domain.teamMember.TeamMember;
 import kea.alog.user.service.TeamService;
 import kea.alog.user.web.dto.TeamDto;
 
@@ -32,13 +35,19 @@ public class TeamController {
     
     @Operation(summary = "팀 삭제", description = "기존에 있던 팀을 삭제(팀 리더 권한)")
     @DeleteMapping()
-    public ResponseEntity<String> deleteTeam(@RequestParam String teamName, @RequestParam Long userPk) {
-        return ResponseEntity.status(HttpStatus.OK).body(teamService.deleteTeam(teamName, userPk));
+    public ResponseEntity<String> deleteTeam(@RequestParam Long teamPk, @RequestParam Long userPk) {
+        return ResponseEntity.status(HttpStatus.OK).body(teamService.deleteTeam(teamPk, userPk));
     }
 
-    @Operation(summary = "팀 정보", description = "팀 이름으로 팀 정보 조회")
+    @Operation(summary = "팀 정보", description = "팀pk로 팀 정보 조회")
     @GetMapping()
-    public ResponseEntity<Team> getTeamInfo(@RequestParam String teamName, @RequestParam Long userPk) {
-        return ResponseEntity.status(HttpStatus.OK).body(teamService.getTeamInfo(teamName, userPk));
+    public ResponseEntity<Team> getTeamInfo(@RequestParam Long teamPk, @RequestParam Long userPk) {
+        return ResponseEntity.status(HttpStatus.OK).body(teamService.getTeamInfo(teamPk, userPk));
+    }
+
+    @Operation(summary = "속한 팀 리스트", description = "userPk를 이용하여 속한 팀 리스트 나열" )
+    @GetMapping("/list")
+    public ResponseEntity<List<Team>> getJoinedTeamList(@RequestParam Long userPk){
+        return ResponseEntity.ok(teamService.getJoinedTeamList(userPk));
     }
 }

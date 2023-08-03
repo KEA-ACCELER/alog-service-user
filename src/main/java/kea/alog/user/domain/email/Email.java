@@ -1,5 +1,7 @@
 package kea.alog.user.domain.email;
 
+import java.io.Serializable;
+
 import org.springframework.stereotype.Component;
 
 import jakarta.persistence.Column;
@@ -22,7 +24,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ToString
-public class Email {
+public class Email implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "email_pk")

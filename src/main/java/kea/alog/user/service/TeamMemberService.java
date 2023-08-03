@@ -14,6 +14,7 @@ import kea.alog.user.domain.teamMember.TeamMember;
 import kea.alog.user.domain.teamMember.TeamMemberRepository;
 import kea.alog.user.domain.user.User;
 import kea.alog.user.domain.user.UserRepository;
+import kea.alog.user.web.dto.TeamMemberDto.AddTeamMemberRequestDto;
 import kea.alog.user.web.dto.TeamMemberDto.DeleteTeamMembersRequestDto;
 import kea.alog.user.web.dto.TeamMemberDto.SaveTeamMembersRequestDto;
 import kea.alog.user.web.dto.TeamMemberDto.getTeamMembersResponseDto;
@@ -36,7 +37,7 @@ public class TeamMemberService {
 
     @Transactional
     public boolean saveTeamMember(Team savedTeam, List<String> NNList) {
-        System.out.println("NNList: " + NNList.toString());
+        log.info("NNList: " + NNList.toString());
         // ArrayList<String> userNNList = new ArrayList<>(NNList);
         for (String userNN : NNList) {
             User user = userRepository.findByUserNn(userNN);
@@ -68,16 +69,16 @@ public class TeamMemberService {
     }
 
     @Transactional
-    public String addTeamMember(SaveTeamMembersRequestDto saveTeamMembersRequestDto, Long userPk) {
+    public String addTeamMember(AddTeamMemberRequestDto addTeamMemberRequestDto, Long userPk) {
 
-        Team team = teamRepository.findByTeamName(saveTeamMembersRequestDto.getTeamName());
+        Team team = teamRepository.findByTeamPk(addTeamMemberRequestDto.getTeamPk());
         if (team == null) {
             return "The team is not existed";
         }
         if (team.getTeamLeaderPk() != userPk) {
             return "You are not the leader of the team";
         }
-        Boolean isAllMemberSaved = saveTeamMember(team, saveTeamMembersRequestDto.getUserNNList());
+        Boolean isAllMemberSaved = saveTeamMember(team, addTeamMemberRequestDto.getUserNNList());
         if (!isAllMemberSaved) {
             return "Team member is not added";
         }
@@ -90,7 +91,7 @@ public class TeamMemberService {
         if (deleteTeamMembersRequestDto.getUserNNList() == null) {
             return "There is no user to delete";
         }
-        Team team = teamRepository.findByTeamName(deleteTeamMembersRequestDto.getTeamName());
+        Team team = teamRepository.findByTeamPk(deleteTeamMembersRequestDto.getTeamPk());
         if (team == null) {
             return "The team is not existed";
         }
@@ -114,23 +115,30 @@ public class TeamMemberService {
     }
 
     @Transactional
-    public getTeamMembersResponseDto getTeamMembers(String teamName, Long userPk) {
-        Team team = teamRepository.findByTeamName(teamName);
+    public getTeamMembersResponseDto getTeamMembers(Long teamPk, Long userPk) {
+        Team team = teamRepository.findByTeamPk(teamPk);
         if (team == null) {
-            log.info("존재하지 않는 팀입니다");
+            log.info("Team is not existed");
             return null;
         }
-        if (!teamMemberRepository.existsByTeamAndUser(team, userRepository.findByUserPk(userPk)) && team.getTeamLeaderPk() != userPk) {
-            log.info("팀 멤버가 아닙니다.");
+
+        User user = userRepository.findByUserPk(userPk);
+        if (user == null || user.isUserDeleted()) {
+            log.info("User is not existed");
             return null;
         }
+
+        if (!teamMemberRepository.existsByTeamAndUser(team, user) && team.getTeamLeaderPk() != userPk) {
+            log.info("You are not team member.");
+            return null;
+        }
+
         ArrayList<String> teamMemberNNs = new ArrayList<>();
         for (TeamMember teamMember : teamMemberRepository.findAllByTeam(team)) {
             teamMemberNNs.add(teamMember.getUser().getUserNn());
         }
 
         User teamLeader = userRepository.findByUserPk(team.getTeamLeaderPk());
-        //String[] arr = teamMemberNNs.stream().toArray(String[]::new); 
         return getTeamMembersResponseDto.builder()
                 .teamLeaderNN(teamLeader.getUserNn())
                 .teamMemberNNs(teamMemberNNs)

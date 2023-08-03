@@ -1,5 +1,6 @@
 package kea.alog.user.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import kea.alog.user.domain.team.Team;
 import kea.alog.user.domain.team.TeamRepository;
 import kea.alog.user.domain.teamMember.TeamMember;
 import kea.alog.user.domain.teamMember.TeamMemberRepository;
+import kea.alog.user.domain.user.User;
+import kea.alog.user.domain.user.UserRepository;
 import kea.alog.user.web.dto.TeamDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +31,9 @@ public class TeamService {
     @Autowired
     TeamMemberRepository teamMemberRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     @Transactional
     public String createTeam(TeamDto.CreateTeamRequestDto createTeamRequestDto, Long userPk) {
         Team team = Team.builder()
@@ -43,7 +49,10 @@ public class TeamService {
         if (savedTeam == null) {
             return "making team is failed";
         }
-  
+        if (createTeamRequestDto.getUserNNList() == null){
+            return "team created successfully without team members";
+        }
+
         Boolean isallMemberSaved = teamMemberService.saveTeamMember(savedTeam, createTeamRequestDto.getUserNNList());
 
         if (!isallMemberSaved) {
@@ -55,9 +64,9 @@ public class TeamService {
     }
 
     @Transactional
-    public String deleteTeam(String teamName, Long userPk) {
+    public String deleteTeam(Long teamPk, Long userPk) {
 
-        Team team = teamRepository.findByTeamName(teamName);
+        Team team = teamRepository.findByTeamPk(teamPk);
         if (team == null) {
             return "team is not existed";
         }
@@ -71,8 +80,8 @@ public class TeamService {
     }
 
     @Transactional
-    public Team getTeamInfo(String teamName, Long userPk) {
-        Team team = teamRepository.findByTeamName(teamName);
+    public Team getTeamInfo(Long teamPk, Long userPk) {
+        Team team = teamRepository.findByTeamPk(teamPk);
         
         if (team == null) {
             log.info("team is not existed, so that team info is null");
@@ -89,6 +98,33 @@ public class TeamService {
         }
         log.info("you are not authorized to access this team info");
         return null;
+    }
+
+    public List<Team> getJoinedTeamList(Long userPk) {
+        User user = userRepository.findByUserPk(userPk);
+
+        //팀의 멤버일 경우
+        List<TeamMember> teammembers = teamMemberRepository.findAllByUser(user);
+        if (teammembers == null) {
+            log.info("you are not joined any team");
+            return null;
+        }
+
+        ArrayList<Team> resultTeamList = new ArrayList<Team>();
+        for (TeamMember teamMember : teammembers) {
+            resultTeamList.add(teamMember.getTeam());
+        }
+
+        //팀의 팀우일 경우
+        List<Team> teamList = teamRepository.findByTeamLeaderPk(userPk);
+        if (teamList == null) {
+            return resultTeamList;
+        }
+        for (Team team : teamList) {
+            resultTeamList.add(team);
+        }
+        
+        return resultTeamList;
     }
         
     
