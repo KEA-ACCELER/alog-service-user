@@ -22,17 +22,30 @@ public class TeamMemberDto {
             this.teamName = teamName;
             this.userNNList = userNNList;
         }
-    } 
+    }
+    
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class AddTeamMemberRequestDto{
+        private Long teamPk;
+        private List<String> userNNList;
+
+        @Builder
+        public AddTeamMemberRequestDto(Long teamPk, List<String> userNNList){
+            this.teamPk = teamPk;
+            this.userNNList = userNNList;
+        }
+    }
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class DeleteTeamMembersRequestDto {
-        private String teamName;
+        private Long teamPk;
         private List<String> userNNList;
 
         @Builder
-        public DeleteTeamMembersRequestDto(String teamName, List<String> userNNList){
-            this.teamName = teamName;
+        public DeleteTeamMembersRequestDto(Long teamPk, List<String> userNNList){
+            this.teamPk = teamPk;
             this.userNNList = userNNList;
         }
     }

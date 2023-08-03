@@ -43,7 +43,10 @@ public class TeamService {
         if (savedTeam == null) {
             return "making team is failed";
         }
-  
+        if (createTeamRequestDto.getUserNNList() == null){
+            return "team created successfully without team members";
+        }
+
         Boolean isallMemberSaved = teamMemberService.saveTeamMember(savedTeam, createTeamRequestDto.getUserNNList());
 
         if (!isallMemberSaved) {
@@ -55,9 +58,9 @@ public class TeamService {
     }
 
     @Transactional
-    public String deleteTeam(String teamName, Long userPk) {
+    public String deleteTeam(Long teamPk, Long userPk) {
 
-        Team team = teamRepository.findByTeamName(teamName);
+        Team team = teamRepository.findByTeamPk(teamPk);
         if (team == null) {
             return "team is not existed";
         }
@@ -71,8 +74,8 @@ public class TeamService {
     }
 
     @Transactional
-    public Team getTeamInfo(String teamName, Long userPk) {
-        Team team = teamRepository.findByTeamName(teamName);
+    public Team getTeamInfo(Long teamPk, Long userPk) {
+        Team team = teamRepository.findByTeamPk(teamPk);
         
         if (team == null) {
             log.info("team is not existed, so that team info is null");
@@ -89,6 +92,10 @@ public class TeamService {
         }
         log.info("you are not authorized to access this team info");
         return null;
+    }
+
+    public List<TeamMember> getJoinedTeamList(Long userPk) {
+        return teamMemberRepository.findAllByUserUserPk(userPk);
     }
         
     

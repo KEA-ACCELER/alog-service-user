@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import kea.alog.user.service.TeamMemberService;
-
+import kea.alog.user.web.dto.TeamMemberDto.AddTeamMemberRequestDto;
 import kea.alog.user.web.dto.TeamMemberDto.DeleteTeamMembersRequestDto;
 import kea.alog.user.web.dto.TeamMemberDto.SaveTeamMembersRequestDto;
 import kea.alog.user.web.dto.TeamMemberDto.getTeamMembersResponseDto;
@@ -28,10 +28,10 @@ public class TeamMemberController {
 
     @Operation(summary = "팀 멤버 한 명 이상 등록", description = "기존에 있던 팀에 신규 멤버를 등록")
     @PostMapping()
-    public ResponseEntity<String> saveTeamMember(@RequestBody SaveTeamMembersRequestDto saveTeamMembersResquestDto,
+    public ResponseEntity<String> saveTeamMember(@RequestBody AddTeamMemberRequestDto addTeamMemberRequestDto,
             @RequestParam Long userPk) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(teamMemberService.addTeamMember(saveTeamMembersResquestDto, userPk));
+                .body(teamMemberService.addTeamMember(addTeamMemberRequestDto, userPk));
     }
 
     @Operation(summary = "팀 멤버 한 명 이상삭제", description = "기존에 있던 팀에 멤버를 삭제 (팀 리더 권한)")
@@ -44,10 +44,10 @@ public class TeamMemberController {
 
     @Operation(summary = "팀의 멤버 닉네임 나열", description = "팀장과 팀의 멤버를 나열, 잘못된 조건으로 입력할 경우 null값 반환")
     @GetMapping()
-    public ResponseEntity<getTeamMembersResponseDto> getTeamMembers(@RequestParam String teamName,
+    public ResponseEntity<getTeamMembersResponseDto> getTeamMembers(@RequestParam Long teamPk,
             @Parameter(description = "본인이 속한 팀인지 확인하는 용도") @RequestParam Long userPk) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(teamMemberService.getTeamMembers(teamName, userPk));
+        return ResponseEntity.status(HttpStatus.OK).body(teamMemberService.getTeamMembers(teamPk, userPk));
     }
 
 }
