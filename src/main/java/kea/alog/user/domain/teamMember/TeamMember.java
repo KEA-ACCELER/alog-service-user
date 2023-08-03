@@ -4,6 +4,8 @@ import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import kea.alog.user.domain.BaseTimeEntity;
 import kea.alog.user.domain.team.Team;
@@ -13,6 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+
 
 @Component
 @Entity
@@ -27,11 +30,11 @@ public class TeamMember extends BaseTimeEntity implements Serializable{
     @Column(name = "team_member_pk")
     private Long teamMemberPk;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "team")
     private Team team;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user")
     private User user;
 

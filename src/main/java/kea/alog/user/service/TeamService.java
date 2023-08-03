@@ -1,5 +1,6 @@
 package kea.alog.user.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import kea.alog.user.domain.team.Team;
 import kea.alog.user.domain.team.TeamRepository;
 import kea.alog.user.domain.teamMember.TeamMember;
 import kea.alog.user.domain.teamMember.TeamMemberRepository;
+import kea.alog.user.domain.user.User;
+import kea.alog.user.domain.user.UserRepository;
 import kea.alog.user.web.dto.TeamDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +30,9 @@ public class TeamService {
 
     @Autowired
     TeamMemberRepository teamMemberRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Transactional
     public String createTeam(TeamDto.CreateTeamRequestDto createTeamRequestDto, Long userPk) {
@@ -94,8 +100,31 @@ public class TeamService {
         return null;
     }
 
-    public List<TeamMember> getJoinedTeamList(Long userPk) {
-        return teamMemberRepository.findAllByUserUserPk(userPk);
+    public List<Team> getJoinedTeamList(Long userPk) {
+        User user = userRepository.findByUserPk(userPk);
+
+        //팀의 멤버일 경우
+        List<TeamMember> teammembers = teamMemberRepository.findAllByUser(user);
+        if (teammembers == null) {
+            log.info("you are not joined any team");
+            return null;
+        }
+
+        ArrayList<Team> resultTeamList = new ArrayList<Team>();
+        for (TeamMember teamMember : teammembers) {
+            resultTeamList.add(teamMember.getTeam());
+        }
+
+        //팀의 팀우일 경우
+        List<Team> teamList = teamRepository.findByTeamLeaderPk(userPk);
+        if (teamList == null) {
+            return resultTeamList;
+        }
+        for (Team team : teamList) {
+            resultTeamList.add(team);
+        }
+        
+        return resultTeamList;
     }
         
     

@@ -47,7 +47,7 @@ public class TeamController {
 
     @Operation(summary = "속한 팀 리스트", description = "userPk를 이용하여 속한 팀 리스트 나열" )
     @GetMapping("/list")
-    public ResponseEntity<List<TeamMember>> getJoinedTeamList(@RequestParam Long userPk){
+    public ResponseEntity<List<Team>> getJoinedTeamList(@RequestParam Long userPk){
         return ResponseEntity.ok(teamService.getJoinedTeamList(userPk));
     }
 }

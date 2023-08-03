@@ -1,6 +1,8 @@
 package kea.alog.user.domain.team;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
 
 public interface TeamRepository extends JpaRepository<Team, Long>{
 
@@ -12,6 +14,8 @@ public interface TeamRepository extends JpaRepository<Team, Long>{
     Team findByTeamNameAndTeamLeaderPk (String teamName, Long teamLeaderPk);
 
     Team findByTeamPk(Long teamPk);
+
+    List<Team> findByTeamLeaderPk(Long teamLeaderPk);
 
     
 }
