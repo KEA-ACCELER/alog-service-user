@@ -16,6 +16,8 @@ import kea.alog.user.utils.CreateRandomCode;
 import kea.alog.user.web.dto.EmailDto;
 import kea.alog.user.web.dto.UserDto;
 import kea.alog.user.web.dto.UserDto.LoginResponseDto;
+import kea.alog.user.web.dto.UserDto.RegistRequestDto;
+import kea.alog.user.web.dto.UserDto.VerifiedRegistRequestDto;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -61,6 +63,7 @@ public class UserService {
         return userRepository.save(registRequestDto.toEntity());
 
     } 
+    
     
    // 로그인
     @Transactional
@@ -118,6 +121,18 @@ public class UserService {
                 .userNN(user.getUserNn())
                 .build();
         }
+    }
+
+
+    public User signUpVerified(VerifiedRegistRequestDto verifiedRegistRequestDto) {
+    if (userRepository.findByUserEmail(verifiedRegistRequestDto.getEmail()) != null) {
+            log.info("already signed up");
+            return null;
+        }
+
+        //비밀번호 암호화
+        verifiedRegistRequestDto.setUserPw(passwordEncoder.encode(verifiedRegistRequestDto.getUserPw()));
+        return userRepository.save(verifiedRegistRequestDto.toEntity());
     }
 
 }
