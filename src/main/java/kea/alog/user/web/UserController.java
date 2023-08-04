@@ -29,6 +29,18 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Operation(summary = "간편 로그인 후 리다이렉트 된 회원가입(이메일 인증 없음)", description = "간편 로그인 후 리다이렉트 된 회원가입")
+    @GetMapping("/permit-all/signup/verified")
+    public ResponseEntity<String> signupVerified(@RequestBody UserDto.VerifiedRegistRequestDto verifiedRegistRequestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.signUpVerified(verifiedRegistRequestDto).getUserNn());
+    }
+    /*
+     * 회원가입 API
+     * 
+     * @RequestBody UserDto.RegistRequestDto
+     * 
+     * @return ok
+     */
     @Operation(summary = "회원가입", description = "회원가입")
     @ApiResponse(responseCode = "201", description = "return : userNn \n 사용예시 : userNn님 환영합니다")
     @PostMapping("/permit-all/signup")
@@ -42,6 +54,7 @@ public class UserController {
      * 
      * @return ok
      */
+    @Operation(summary = "로그인(auth)", description = "로그인")
     @PostMapping("/login")
     public ResponseEntity<UserDto.LoginResponseDto> login(@RequestBody UserDto.LoginRequestDto loginRequestDto) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.userLogin(loginRequestDto));
@@ -93,7 +106,7 @@ public class UserController {
      * @return ok, true
      * 
      */
-    @Operation(summary = "회원가입이 완료된 이메일인지 확인하는 API(Auth 서버)", description = "회원가입이 완료된 이메일인지 확인하는 API")
+    @Operation(summary = "회원가입이 완료된 이메일인지 확인하는 API(Auth)", description = "회원가입이 완료된 이메일인지 확인하는 API")
     @GetMapping(path = "/signup/confirm")
     public ResponseEntity<UserDto.LoginResponseDto> isConfirmedEmail(@RequestParam(value = "email") String email) {
         return ResponseEntity.ok(userService.isConfirmedEmail(email));

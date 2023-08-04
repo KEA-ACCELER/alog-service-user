@@ -29,6 +29,26 @@ public class UserDto {
                     .build();
         }
     }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class VerifiedRegistRequestDto{
+        @Setter
+        private String userPw;
+        private String userNN;
+        private String email;
+
+
+        public User toEntity(){
+            return User.builder()
+                    .userPw(userPw)
+                    .userNn(userNN)
+                    .userEmail(email)
+                    .userDeleted(false) //default value
+                    .isVerified(true)
+                    .build();
+        }
+    }
     
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
