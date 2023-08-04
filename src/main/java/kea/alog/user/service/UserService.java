@@ -15,7 +15,7 @@ import kea.alog.user.domain.user.UserRepository;
 import kea.alog.user.utils.CreateRandomCode;
 import kea.alog.user.web.dto.EmailDto;
 import kea.alog.user.web.dto.UserDto;
-
+import kea.alog.user.web.dto.UserDto.LoginResponseDto;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -105,5 +105,19 @@ public class UserService {
         return userRepository.existsByUserNn(userNN);
     }
 
+    // 이메일이 존재하는 유저면 로그인완료
+    @Transactional
+    public LoginResponseDto isConfirmedEmail(String email) {
+        User user = userRepository.findByUserEmail(email);
+        if (user == null) {
+            return null;
+        }
+        else{
+            return UserDto.LoginResponseDto.builder()
+                .userPk(user.getUserPk())
+                .userNN(user.getUserNn())
+                .build();
+        }
+    }
 
 }

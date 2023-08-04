@@ -38,12 +38,13 @@ public class UserDto {
         // private String userPw;
         private String email;
         private String userNN;
+        // TODO 유저 프로필 이미지 추가
 
 
         @Builder
         public GetUserResponseDto(Long userPk,  String email, String NN){
             this.userPk = userPk;
-            // this.userPw = userPw;
+            // this.userPw = userPw지
             this.email = email;
             this.userNN = NN;
         }
@@ -67,6 +68,12 @@ public class UserDto {
     public static class LoginRequestDto{
         private String userEmail;
         private String userPw;
+
+        @Builder
+        public LoginRequestDto(String userEmail, String userPw){
+            this.userEmail = userEmail;
+            this.userPw = userPw;
+        }
     }
 
     @Getter

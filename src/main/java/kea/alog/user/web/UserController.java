@@ -31,7 +31,7 @@ public class UserController {
 
     @Operation(summary = "회원가입", description = "회원가입")
     @ApiResponse(responseCode = "201", description = "return : userNn \n 사용예시 : userNn님 환영합니다")
-    @PostMapping("/signup")
+    @PostMapping("/permit-all/signup")
     public ResponseEntity<String> signup(@RequestBody UserDto.RegistRequestDto registRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.signUp(registRequestDto).getUserNn());
     }
@@ -85,5 +85,20 @@ public class UserController {
         return ResponseEntity.ok(userService.getUser(userPk));
     }
 
+    /*
+     * 회원가입이 완료된 이메일인지 확인하는 API
+     * 
+     * @variable email
+     * 
+     * @return ok, true
+     * 
+     */
+    @Operation(summary = "회원가입이 완료된 이메일인지 확인하는 API(Auth 서버)", description = "회원가입이 완료된 이메일인지 확인하는 API")
+    @GetMapping(path = "/signup/confirm")
+    public ResponseEntity<UserDto.LoginResponseDto> isConfirmedEmail(@RequestParam(value = "email") String email) {
+        return ResponseEntity.ok(userService.isConfirmedEmail(email));
+    }
+    //TODO Team 이미지 업로드
+    //TODO user 이미지 업로드
 
 }
