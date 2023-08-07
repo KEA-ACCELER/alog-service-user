@@ -13,7 +13,7 @@ import kea.alog.user.service.EmailService;
 import kea.alog.user.web.dto.EmailDto;
 
 @RestController
-@RequestMapping("/api/users/emails")
+@RequestMapping("/api/users/permit-all/emails")
 public class EmailController {
 
     @Autowired
