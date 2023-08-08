@@ -68,7 +68,7 @@ public class UserController {
      * @return ok
      */
     @Operation(summary = "아이디 중복확인", description = "아이디 중복확인")
-    @GetMapping(path = "/duplicated/{userNN}")
+    @GetMapping(path = "/permit-all/duplicated/{userNN}")
     public ResponseEntity<Boolean> isDuplicatedId(@PathVariable(value = "userNN") String userNN) {
         return ResponseEntity.ok(userService.isDuplicatedId(userNN));
     }
