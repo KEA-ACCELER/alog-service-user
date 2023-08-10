@@ -30,7 +30,7 @@ public class UserController {
     UserService userService;
 
     @Operation(summary = "간편 로그인 후 리다이렉트 된 회원가입(이메일 인증 없음)", description = "간편 로그인 후 리다이렉트 된 회원가입")
-    @GetMapping("/permit-all/signup/verified")
+    @PostMapping("/permit-all/signup/verified")
     public ResponseEntity<String> signupVerified(@RequestBody UserDto.VerifiedRegistRequestDto verifiedRegistRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.signUpVerified(verifiedRegistRequestDto).getUserNn());
     }
