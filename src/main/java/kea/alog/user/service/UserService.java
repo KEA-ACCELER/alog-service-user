@@ -123,7 +123,7 @@ public class UserService {
         }
     }
 
-
+    @Transactional
     public User signUpVerified(VerifiedRegistRequestDto verifiedRegistRequestDto) {
     if (userRepository.findByUserEmail(verifiedRegistRequestDto.getEmail()) != null) {
             log.info("already signed up");
