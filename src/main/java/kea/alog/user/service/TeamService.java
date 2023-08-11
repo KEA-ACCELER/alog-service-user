@@ -76,6 +76,13 @@ public class TeamService {
             return "you are not team leader";
         }
 
+        List<TeamMember> teamMemberList = teamMemberRepository.findAllByTeam(team);
+        if (teamMemberList != null) {
+            for (TeamMember teamMember : teamMemberList) {
+                teamMemberRepository.delete(teamMember);
+            }
+        }
+
         teamRepository.delete(team);
         return "team deleted successfully";
     }
