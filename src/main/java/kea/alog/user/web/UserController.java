@@ -111,7 +111,7 @@ public class UserController {
     public ResponseEntity<UserDto.LoginResponseDto> isConfirmedEmail(@RequestParam(value = "email") String email) {
         return ResponseEntity.ok(userService.isConfirmedEmail(email));
     }
-    //TODO Team 이미지 업로드
+
 
     @Operation(summary = "프로필 이미지 업로드(aggr)", description = "프로필 이미지 업로드")
     @PostMapping(path = "/image")
@@ -119,7 +119,7 @@ public class UserController {
         return ResponseEntity.ok(userService.uploadProfileImage(userPk, image));
     }
 
-    //TODO user 이미지 업로드
+
 
 
 

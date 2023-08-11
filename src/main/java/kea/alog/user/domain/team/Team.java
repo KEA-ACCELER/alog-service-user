@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 
@@ -30,13 +31,17 @@ public class Team extends BaseTimeEntity implements Serializable{
     @Column(name = "team_name", length = 20)
     private String teamName;
 
+    @Setter
+    @Column(name = "team_image", length = 100)
+    private String teamImage;
 
     @Column(name = "team_leader_pk")
     private Long teamLeaderPk;
 
     @Builder
-    public Team (String teamName, Long teamLeaderPk){
+    public Team (String teamName, Long teamLeaderPk, String teamImage){
         this.teamName = teamName;
         this.teamLeaderPk = teamLeaderPk;
+        this.teamImage = teamImage;
     }
 }

@@ -39,6 +39,7 @@ public class TeamService {
         Team team = Team.builder()
                                 .teamName(createTeamRequestDto.getTeamName())
                                 .teamLeaderPk(userPk)
+                                .teamImage("")
                                 .build();
 
         if (teamRepository.existsByTeamNameAndTeamLeaderPk(team.getTeamName(), team.getTeamLeaderPk())) {
@@ -125,6 +126,23 @@ public class TeamService {
         }
         
         return resultTeamList;
+    }
+
+    @Transactional
+    public String uploadTeamImage(Long teamPk, Long userPk, String teamImage) {
+        Team team = teamRepository.findByTeamPk(teamPk);
+        if (team == null) {
+            return "team is not existed";
+        }
+
+        User user = userRepository.findByUserPk(userPk);
+        if(user==null ||  user.isUserDeleted()){
+            return "user not found";
+        }
+        
+        team.setTeamImage(teamImage);
+        return teamImage;
+        
     }
         
     
