@@ -30,7 +30,7 @@ public class UserController {
     UserService userService;
 
     @Operation(summary = "간편 로그인 후 리다이렉트 된 회원가입(이메일 인증 없음)", description = "간편 로그인 후 리다이렉트 된 회원가입")
-    @GetMapping("/permit-all/signup/verified")
+    @PostMapping("/permit-all/signup/verified")
     public ResponseEntity<String> signupVerified(@RequestBody UserDto.VerifiedRegistRequestDto verifiedRegistRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.signUpVerified(verifiedRegistRequestDto).getUserNn());
     }
@@ -68,7 +68,7 @@ public class UserController {
      * @return ok
      */
     @Operation(summary = "아이디 중복확인", description = "아이디 중복확인")
-    @GetMapping(path = "/duplicated/{userNN}")
+    @GetMapping(path = "/permit-all/duplicated/{userNN}")
     public ResponseEntity<Boolean> isDuplicatedId(@PathVariable(value = "userNN") String userNN) {
         return ResponseEntity.ok(userService.isDuplicatedId(userNN));
     }
@@ -111,7 +111,16 @@ public class UserController {
     public ResponseEntity<UserDto.LoginResponseDto> isConfirmedEmail(@RequestParam(value = "email") String email) {
         return ResponseEntity.ok(userService.isConfirmedEmail(email));
     }
-    //TODO Team 이미지 업로드
-    //TODO user 이미지 업로드
+
+
+    @Operation(summary = "프로필 이미지 업로드(aggr)", description = "프로필 이미지 업로드")
+    @PostMapping(path = "/image")
+    public ResponseEntity<String> uploadProfileImage(@RequestParam(value = "userPk") Long userPk, @RequestParam(value = "image") String image) {
+        return ResponseEntity.ok(userService.uploadProfileImage(userPk, image));
+    }
+
+
+
+
 
 }
