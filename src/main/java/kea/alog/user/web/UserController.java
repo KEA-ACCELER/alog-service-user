@@ -112,6 +112,15 @@ public class UserController {
         return ResponseEntity.ok(userService.isConfirmedEmail(email));
     }
     //TODO Team 이미지 업로드
+
+    @Operation(summary = "프로필 이미지 업로드(aggr)", description = "프로필 이미지 업로드")
+    @PostMapping(path = "/image")
+    public ResponseEntity<String> uploadProfileImage(@RequestParam(value = "userPk") Long userPk, @RequestParam(value = "image") String image) {
+        return ResponseEntity.ok(userService.uploadProfileImage(userPk, image));
+    }
+
     //TODO user 이미지 업로드
+
+
 
 }

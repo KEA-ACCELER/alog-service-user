@@ -69,7 +69,7 @@ public class UserService {
     @Transactional
     public UserDto.LoginResponseDto userLogin(UserDto.LoginRequestDto loginRequestDto) {
         User user = userRepository.findByUserEmail(loginRequestDto.getUserEmail());
-        if (user == null) {
+        if (user == null||  user.isUserDeleted()) {
             return null;
         }
         if (!passwordEncoder.matches(loginRequestDto.getUserPw(), user.getUserPw())) {// 평문, 암호화 순. 순서 유의
@@ -91,6 +91,7 @@ public class UserService {
                 .userPk(user.getUserPk())
                 .email(user.getUserEmail())
                 .NN(user.getUserNn())
+                .userProfile(user.getUserProfile())
                 .build();
 
     }
@@ -112,7 +113,7 @@ public class UserService {
     @Transactional
     public LoginResponseDto isConfirmedEmail(String email) {
         User user = userRepository.findByUserEmail(email);
-        if (user == null) {
+        if (user == null ||  user.isUserDeleted()) {
             return null;
         }
         else{
@@ -133,6 +134,17 @@ public class UserService {
         //비밀번호 암호화
         verifiedRegistRequestDto.setUserPw(passwordEncoder.encode(verifiedRegistRequestDto.getUserPw()));
         return userRepository.save(verifiedRegistRequestDto.toEntity());
+    }
+
+
+    @Transactional
+    public String uploadProfileImage(Long userPk, String image) {
+        User user = userRepository.findByUserPk(userPk);
+        if(user==null ||  user.isUserDeleted()){
+            return "user not found";
+        }
+        user.setUserProfile(image);
+        return image;
     }
 
 }

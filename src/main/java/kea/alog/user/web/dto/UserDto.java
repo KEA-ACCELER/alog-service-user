@@ -26,6 +26,7 @@ public class UserDto {
                     .userEmail(email)
                     .userDeleted(false) //default value
                     .isVerified(true)
+                    .userProfile("")
                     .build();
         }
     }
@@ -46,6 +47,7 @@ public class UserDto {
                     .userEmail(email)
                     .userDeleted(false) //default value
                     .isVerified(true)
+                    .userProfile("")
                     .build();
         }
     }
@@ -55,33 +57,20 @@ public class UserDto {
     public static class GetUserResponseDto {
         
         private Long userPk;
-        // private String userPw;
         private String email;
         private String userNN;
-        // TODO 유저 프로필 이미지 추가
+        private String userProfile;
 
 
         @Builder
-        public GetUserResponseDto(Long userPk,  String email, String NN){
+        public GetUserResponseDto(Long userPk,  String email, String NN, String userProfile){
             this.userPk = userPk;
-            // this.userPw = userPw지
             this.email = email;
             this.userNN = NN;
+            this.userProfile = userProfile;
         }
     }
     
-    // @Getter
-    // @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    // public static class UpdateProfileRequestDto {
-    //     private String userId;
-    //     private String userProfile;
-
-    //     @Builder
-    //     public UpdateProfileRequestDto(String userId, String profile){
-    //         this.userId = userId;
-    //         this.userProfile = profile;
-    //     }
-    // }
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
