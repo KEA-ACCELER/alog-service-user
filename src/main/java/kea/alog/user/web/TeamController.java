@@ -56,4 +56,6 @@ public class TeamController {
     public ResponseEntity<String> uploadTeamImage(@RequestParam("teamPk") Long teamPk, @RequestParam("userPk") Long userPk, @RequestParam("imgs") String teamImage){
         return ResponseEntity.ok(teamService.uploadTeamImage(teamPk, userPk, teamImage));
     }
+
+  
 }

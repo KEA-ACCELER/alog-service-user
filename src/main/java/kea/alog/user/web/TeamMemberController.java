@@ -1,5 +1,7 @@
 package kea.alog.user.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import kea.alog.user.service.TeamMemberService;
 import kea.alog.user.web.dto.TeamMemberDto.AddTeamMemberRequestDto;
 import kea.alog.user.web.dto.TeamMemberDto.DeleteTeamMembersRequestDto;
+import kea.alog.user.web.dto.TeamMemberDto.GetTeamMembersInfoResponseDto;
 import kea.alog.user.web.dto.TeamMemberDto.SaveTeamMembersRequestDto;
 import kea.alog.user.web.dto.TeamMemberDto.getTeamMembersResponseDto;
 
@@ -50,4 +53,10 @@ public class TeamMemberController {
         return ResponseEntity.status(HttpStatus.OK).body(teamMemberService.getTeamMembers(teamPk, userPk));
     }
 
+    @Operation(summary = "팀 멤버 정보")
+    @GetMapping(value="/info")
+    public ResponseEntity<List<GetTeamMembersInfoResponseDto>> getMethodName(@RequestParam Long teamPk) {
+        return ResponseEntity.ok(teamMemberService.getTeamMembersInfo(teamPk));
+    }
+    
 }

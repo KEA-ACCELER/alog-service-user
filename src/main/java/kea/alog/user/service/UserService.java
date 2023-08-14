@@ -147,4 +147,10 @@ public class UserService {
         return image;
     }
 
+
+    @Transactional
+    public String getNtoE(String userNn) {
+        return userRepository.findByUserNn(userNn).getUserEmail();
+    }
+
 }
