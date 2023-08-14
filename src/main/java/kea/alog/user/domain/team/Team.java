@@ -32,7 +32,7 @@ public class Team extends BaseTimeEntity implements Serializable{
     private String teamName;
 
     @Setter
-    @Column(name = "team_image", length = 100)
+    @Column(name = "team_image", length = 500)
     private String teamImage;
 
     @Column(name = "team_leader_pk")
