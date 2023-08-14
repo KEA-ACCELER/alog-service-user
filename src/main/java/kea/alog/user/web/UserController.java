@@ -115,8 +115,8 @@ public class UserController {
 
     @Operation(summary = "프로필 이미지 업로드(aggr)", description = "프로필 이미지 업로드")
     @PostMapping(path = "/image")
-    public ResponseEntity<String> uploadProfileImage(@RequestParam(value = "userPk") Long userPk, @RequestParam(value = "image") String image) {
-        return ResponseEntity.ok(userService.uploadProfileImage(userPk, image));
+    public ResponseEntity<String> uploadProfileImage(@RequestParam(value = "userPk") Long userPk, @RequestParam(value = "imgs") String imgs) {
+        return ResponseEntity.ok(userService.uploadProfileImage(userPk, imgs));
     }
 
 
