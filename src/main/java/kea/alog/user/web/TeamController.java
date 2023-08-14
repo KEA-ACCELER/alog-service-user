@@ -53,7 +53,7 @@ public class TeamController {
 
     @Operation(summary = "팀 이미지 업로드(aggr)", description = "팀 이미지 업로드")
     @PostMapping("/image")
-    public ResponseEntity<String> uploadTeamImage(@RequestParam Long teamPk, @RequestParam Long userPk, @RequestParam String teamImage){
+    public ResponseEntity<String> uploadTeamImage(@RequestParam("teamPk") Long teamPk, @RequestParam("userPk") Long userPk, @RequestParam("imgs") String teamImage){
         return ResponseEntity.ok(teamService.uploadTeamImage(teamPk, userPk, teamImage));
     }
 }
