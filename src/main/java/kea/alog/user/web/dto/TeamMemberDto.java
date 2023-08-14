@@ -63,4 +63,18 @@ public class TeamMemberDto {
         }
     }
 
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class GetTeamMembersInfoResponseDto {
+        private Long userPk;
+        private String userNn;
+        private String userEmail;
+
+        @Builder
+        public GetTeamMembersInfoResponseDto(Long userPk, String userNn, String userEmail){
+            this.userPk = userPk;
+            this.userNn = userNn;
+            this.userEmail = userEmail;
+        }
+    }
 }

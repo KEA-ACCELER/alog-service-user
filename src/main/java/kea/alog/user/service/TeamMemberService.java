@@ -16,6 +16,7 @@ import kea.alog.user.domain.user.User;
 import kea.alog.user.domain.user.UserRepository;
 import kea.alog.user.web.dto.TeamMemberDto.AddTeamMemberRequestDto;
 import kea.alog.user.web.dto.TeamMemberDto.DeleteTeamMembersRequestDto;
+import kea.alog.user.web.dto.TeamMemberDto.GetTeamMembersInfoResponseDto;
 import kea.alog.user.web.dto.TeamMemberDto.SaveTeamMembersRequestDto;
 import kea.alog.user.web.dto.TeamMemberDto.getTeamMembersResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -142,7 +143,43 @@ public class TeamMemberService {
         return getTeamMembersResponseDto.builder()
                 .teamLeaderNN(teamLeader.getUserNn())
                 .teamMemberNNs(teamMemberNNs)
+
                 .build();
+
+    }
+
+    @Transactional
+    public List<GetTeamMembersInfoResponseDto> getTeamMembersInfo(Long teamPk) {
+        Team team = teamRepository.findByTeamPk(teamPk);
+        if (team == null) {
+            log.info("Team is not existed");
+            return null;
+        }
+
+        List<TeamMember> teamMemberList = teamMemberRepository.findAllByTeam(team);
+        if (teamMemberList == null) {
+            log.info("Team member is not existed");
+            return null;
+        }
+
+        List<GetTeamMembersInfoResponseDto> teamMembersInfo = teamMemberList.stream()
+                .map(teamMember -> new GetTeamMembersInfoResponseDto(teamMember.getUser().getUserPk(),
+                        teamMember.getUser().getUserNn(),
+                        teamMember.getUser().getUserEmail()))
+                .collect(Collectors.toList());
+
+        User teamLeader = userRepository.findByUserPk(team.getTeamLeaderPk());
+
+        teamMembersInfo.add(GetTeamMembersInfoResponseDto.builder()
+                .userPk(teamLeader.getUserPk())
+                .userNn(teamLeader.getUserNn())
+                .userEmail(teamLeader.getUserEmail())
+                .build());
+
+        return teamMembersInfo;
+
+
+
 
     }
 
