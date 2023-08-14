@@ -44,7 +44,7 @@ public class User extends BaseTimeEntity implements Serializable{
     private boolean userDeleted;
 
     @Setter
-    @Column(name = "user_profile", length = 100)
+    @Column(name = "user_profile", length = 500)
     private String userProfile;
 
     // @Column(name = "user_role", length = 10)

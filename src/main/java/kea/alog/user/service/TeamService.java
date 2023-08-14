@@ -148,6 +148,7 @@ public class TeamService {
         }
         
         team.setTeamImage(teamImage);
+        log.info("team : ", team.toString() );
         return teamImage;
         
     }
