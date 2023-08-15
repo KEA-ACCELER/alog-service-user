@@ -153,4 +153,10 @@ public class UserService {
         return userRepository.findByUserNn(userNn).getUserEmail();
     }
 
+
+    @Transactional
+    public Long getNtoP(String userNn) {
+        return userRepository.findByUserNn(userNn).getUserPk();
+    }
+
 }
