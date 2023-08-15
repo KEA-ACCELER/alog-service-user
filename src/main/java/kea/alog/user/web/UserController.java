@@ -121,10 +121,15 @@ public class UserController {
 
 
     @Operation(summary = "닉네임으로 이메일 가져오기")
-    @GetMapping("/permit-all/ntoe")
+    @GetMapping("/ntoe")
     public ResponseEntity<String> getNtoE(@RequestParam(value = "userNn") String userNn){
         return ResponseEntity.ok(userService.getNtoE(userNn));
     }
 
 
+    @Operation(summary = "닉네임으로 pk 가져오기")
+    @GetMapping("/ntop")
+    public ResponseEntity<Long> getNtoP(@RequestParam(value = "userNn") String userNn){
+        return ResponseEntity.ok(userService.getNtoP(userNn));
+    }
 }
