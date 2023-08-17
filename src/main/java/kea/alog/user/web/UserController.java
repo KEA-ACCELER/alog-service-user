@@ -139,4 +139,5 @@ public class UserController {
     public ResponseEntity<String> changeNn(@RequestParam(value = "userPk") Long userPk, @RequestParam(value = "userNn") String userNn){
         return ResponseEntity.ok(userService.changeNn(userPk, userNn));
     }
+    
 }
