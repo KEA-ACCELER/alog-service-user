@@ -166,7 +166,12 @@ public class UserService {
         if(user==null ||  user.isUserDeleted()){
             return "user not found";
         }
+        //중복 확인 후 변경
+        if(userRepository.existsByUserNn(userNn)){
+            return "duplicated nickname";
+        }
         user.setUserNn(userNn);
+        log.info("change to " + user.getUserNn());
         return "change to "+userNn;
     }
 
