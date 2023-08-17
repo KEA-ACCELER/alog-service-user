@@ -40,10 +40,10 @@ public class UserService {
     // TODO 깃허브로 접근 할 경우 이메일 인증 하지 않음.
     @Transactional
     public User signUp(UserDto.RegistRequestDto registRequestDto) {
-        // if (userRepository.findByUserEmail(registRequestDto.getEmail()) != null) {
-        //     log.info("already signed up");
-        //     return null;
-        // }
+        if (userRepository.findByUserEmail(registRequestDto.getEmail()) != null) {
+            log.info("already signed up");
+            return null;
+        }
 
         // Email email = emailRepository.findByEmail(registRequestDto.getEmail());
         // if(email==null){
@@ -171,7 +171,7 @@ public class UserService {
             return "duplicated nickname";
         }
         user.setUserNn(userNn);
-        log.info("change to " + user.getUserNn());
+        log.info("change to "+userRepository.findByUserPk(userPk).getUserNn());
         return "change to "+userNn;
     }
 
