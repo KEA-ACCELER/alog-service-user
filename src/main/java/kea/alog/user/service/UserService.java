@@ -45,18 +45,18 @@ public class UserService {
             return null;
         }
 
-        // Email email = emailRepository.findByEmail(registRequestDto.getEmail());
-        // if(email==null){
-        //     log.info("try to verify with email");
-        //     return null;
-        // }
-        // if (!email.getVerifyCode().equals("VERIFIED")) {
-        //     log.info("not verified email");
-        //     return null;
-        // }
+        Email email = emailRepository.findByEmail(registRequestDto.getEmail());
+        if(email==null){
+            log.info("try to verify with email");
+            return null;
+        }
+        if (!email.getVerifyCode().equals("VERIFIED")) {
+            log.info("not verified email");
+            return null;
+        }
     
-        // //회원 가입을 완료한 유저이기 때문에 email테이블의 정보 삭제
-        // emailRepository.delete(email);
+        //회원 가입을 완료한 유저이기 때문에 email테이블의 정보 삭제
+        emailRepository.delete(email);
 
         //비밀번호 암호화
         registRequestDto.setUserPw(passwordEncoder.encode(registRequestDto.getUserPw()));
