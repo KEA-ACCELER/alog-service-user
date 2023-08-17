@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -131,5 +132,11 @@ public class UserController {
     @GetMapping("/ntop")
     public ResponseEntity<Long> getNtoP(@RequestParam(value = "userNn") String userNn){
         return ResponseEntity.ok(userService.getNtoP(userNn));
+    }
+
+    @Operation(summary= "닉네임 변경")
+    @PatchMapping("/nn")
+    public ResponseEntity<String> changeNn(@RequestParam(value = "userPk") Long userPk, @RequestParam(value = "userNn") String userNn){
+        return ResponseEntity.ok(userService.changeNn(userPk, userNn));
     }
 }
