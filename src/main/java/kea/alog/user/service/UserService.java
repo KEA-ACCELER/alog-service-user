@@ -159,4 +159,15 @@ public class UserService {
         return userRepository.findByUserNn(userNn).getUserPk();
     }
 
+
+    @Transactional
+    public String changeNn(Long userPk, String userNn) {
+        User user = userRepository.findByUserPk(userPk);
+        if(user==null ||  user.isUserDeleted()){
+            return "user not found";
+        }
+        user.setUserNn(userNn);
+        return "change to "+userNn;
+    }
+
 }

@@ -31,6 +31,7 @@ public class User extends BaseTimeEntity implements Serializable{
     @Column(name = "user_pw", length = 100, nullable = false)
     private String userPw;
 
+    @Setter
     @Column(name = "user_nn", length = 10, nullable = false)
     private String userNn;
 
